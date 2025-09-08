@@ -1,6 +1,7 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
+// import { setupSwagger } from '../docs/swagger.js';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
@@ -9,7 +10,6 @@ import dotenv from 'dotenv';
 import { getEnvVar } from './utils/getEnvVar.js';
 
 import cookieParser from 'cookie-parser';
-
 import auth from './routers/auth.js';
 import recipesRouter from './routers/recipes.js';
 import userRouter from './routers/users.js';
@@ -24,7 +24,12 @@ export const startServer = () => {
   const app = express();
 
   app.use(express.json());
-  app.use(cors());
+  app.use(
+    cors({
+      origin: 'http://localhost:5173',
+      credentials: true,
+    }),
+  );
   app.use(cookieParser());
 
   app.use(
