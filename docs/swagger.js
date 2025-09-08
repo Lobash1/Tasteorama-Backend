@@ -15,7 +15,6 @@ const options = {
       },
       {
         url: 'https://tasteorama-backend-hj6b.onrender.com/',
-        git,
       },
     ],
   },
