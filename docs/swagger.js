@@ -14,7 +14,8 @@ const options = {
         url: 'http://localhost:3000/api',
       },
       {
-        // url: 'https://project-lucky7.onrender.com/api',
+        url: 'https://tasteorama-backend-hj6b.onrender.com/',
+        git,
       },
     ],
   },
