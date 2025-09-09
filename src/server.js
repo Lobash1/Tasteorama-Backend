@@ -1,15 +1,17 @@
 import express from 'express';
 import pino from 'pino-http';
 import cors from 'cors';
-// import { setupSwagger } from '../docs/swagger.js';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+import path from 'node:path';
+
+import swaggerUi from 'swagger-ui-express';
+import yaml from 'yamljs';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-
-import dotenv from 'dotenv';
 import { getEnvVar } from './utils/getEnvVar.js';
 
-import cookieParser from 'cookie-parser';
 import auth from './routers/auth.js';
 import recipesRouter from './routers/recipes.js';
 import userRouter from './routers/users.js';
@@ -23,10 +25,13 @@ const PORT = Number(getEnvVar('PORT', '3000'));
 export const startServer = () => {
   const app = express();
 
+  app.use('/thumb', express.static(path.resolve('uploads')));
+
   app.use(express.json());
+
   app.use(
     cors({
-      origin: getEnvVar('FRONTEND_URL', 'http://localhost:5173'),
+      origin: 'https://tasteorama.vercel.app/',
       credentials: true,
     }),
   );
@@ -39,6 +44,8 @@ export const startServer = () => {
       },
     }),
   );
+  const swaggerDocument = yaml.load('./docs/swagger.yaml');
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
   app.use('/api/auth', auth);
   app.use('/api/recipes', recipesRouter);
@@ -54,4 +61,4 @@ export const startServer = () => {
   });
 };
 
-startServer();
+// startServer();
